@@ -3,49 +3,30 @@ package com.epam.rd.autotasks;
 class Spiral {
     static int[][] spiral(int rows, int columns) {
         int[][] array = new int[rows][columns];
-        fillArray(columns, rows, array);
+        fillSpiralArray(columns, rows, array);
         return array;
     }
 
-    private static void fillArray(int columns, int rows, int[][] array) {
-        int counter = 1;
-        int minCol = 0;
-        int maxCol = columns;
-        int minRow = 0;
-        int maxRow = rows;
-        int spiralSize = rows * columns;
+    /*
+    Fills the array with numbers starting from 1, in spiral direction.
+    If it already reached spiral size and filled all the array cells, ends loop.
+     */
+    private static void fillSpiralArray(int columns, int rows, int[][] array) {
+        int counter = 1, minCol = 0, maxCol = columns, minRow = 0, maxRow = rows, spiralSize = rows * columns;
         while(true) {
-//            for (int i = minCol; i < maxCol; i++) {
-//                array[minRow][i] = counter;
-//                counter++;
-//            }
-          counter = increaseRight(minCol, maxCol, minRow, counter, array);
-
-            if (counter > spiralSize) break;
-            counter = increaseDown(minRow + 1, maxRow, maxCol - 1, counter, array);
-//            for (int i = minRow + 1; i < maxRow; i++) {
-//                array[i][maxCol - 1] = counter;
-//                counter++;
-//            }
-            counter = decreaseLeft(maxCol - 2, minCol - 1, maxRow - 1, counter, array);
-//            for (int i = maxCol - 2; i > minCol - 1; i--) {
-//                array[maxRow - 1][i] = counter;
-//                counter++;
-//            }
-            counter = decreaseUp(maxRow - 2, minRow + 1, minCol, counter, array);
-//            for (int i = maxRow - 2; i >= minRow + 1; i--) {
-//                array[i][minCol] = counter;
-//                counter++;
-//            }
-            minCol++;
-            minRow++;
-            maxCol--;
-            maxRow--;
+          counter = fillLeftToRight(minCol, maxCol, minRow, counter, array);
+          if (counter > spiralSize) break;
+          counter = fillTopToBottom(minRow + 1, maxRow, maxCol - 1, counter, array);
+          counter = fillRightToLeft(maxCol - 2, minCol - 1, maxRow - 1, counter, array);
+          counter = fillBottomToTop(maxRow - 2, minRow + 1, minCol, counter, array);
+          minCol++; minRow++; maxCol--; maxRow--;
         }
     }
 
-
-    private static int increaseRight(int start, int end, int fixed, int counter, int[][] array) {
+    /*
+    Fills the unfilled cells of the array row, moving from left to right, increasing the number for every next cell.
+     */
+    private static int fillLeftToRight(int start, int end, int fixed, int counter, int[][] array) {
         int tempCounter = counter;
         for (int i = start; i < end; i++) {
             array[fixed][i] = tempCounter;
@@ -54,7 +35,10 @@ class Spiral {
         return tempCounter;
     }
 
-    private static int increaseDown(int start, int end, int fixed, int counter, int[][] array) {
+    /*
+    Fills the unfilled cells of the array column, moving from top to bottom, increasing the number for every next cell.
+     */
+    private static int fillTopToBottom(int start, int end, int fixed, int counter, int[][] array) {
         int tempCounter = counter;
         for (int i = start; i < end; i++) {
             array[i][fixed] = tempCounter;
@@ -63,7 +47,10 @@ class Spiral {
         return tempCounter;
     }
 
-    private static int decreaseLeft(int start, int end, int fixed, int counter, int[][] array) {
+    /*
+    Fills the unfilled cells of the array row, moving from right to left, increasing the number for every next cell.
+     */
+    private static int fillRightToLeft(int start, int end, int fixed, int counter, int[][] array) {
         int tempCounter = counter;
         for (int i = start; i > end; i--) {
             array[fixed][i] = tempCounter;
@@ -72,7 +59,10 @@ class Spiral {
         return tempCounter;
     }
 
-    private static int decreaseUp(int start, int end, int fixed, int counter, int[][] array) {
+    /*
+    Fills the unfilled cells of the array column, moving from bottom to top, increasing the number for every next cell.
+     */
+    private static int fillBottomToTop(int start, int end, int fixed, int counter, int[][] array) {
         int tempCounter = counter;
         for (int i = start; i >= end; i--) {
             array[i][fixed] = tempCounter;
